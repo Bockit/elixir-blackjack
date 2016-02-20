@@ -1,21 +1,27 @@
 defmodule Cards.Deck do
-  @suits ~W(D C H S)
-  @values ~W(2 3 4 5 6 7 8 9 10 J K Q A)
-
   alias Cards.Card
 
-  def build_deck do
-    @suits
-    |> Enum.map(&(build_suit(&1, @values)))
-    |> Enum.concat
+  @suits [:diamonds, :clubs, :hearts, :spades]
+  @values [2, 3, 4, 5, 6, 7, 8, 9, 10, :jack, :king, :queen, :ace]
+
+  def build_deck(suits \\ @suits, values \\ @values) do
+    for suit <- suits, value <- values, do: %Card{suit: suit, value: value}
   end
 
-  defp build_suit(suit, values) do
-    Enum.map(values, &(%Card{suit: suit, value: &1}))
+  def build_deck_with_jokers(suits \\ @suits, values \\ @values) do
+    Enum.append(build_deck(suits, values), jokers)
   end
 
-  def shuffle_deck(deck) do
-    :random.seed(:os.timestamp)
+  defp jokers do
+    joker = %Card{value: 'Joker'}
+    [joker, joker]
+  end
+
+  def shuffle_deck(deck, seed \\ :os.timestamp) do
+    :random.seed(seed)
     Enum.shuffle(deck)
   end
+
+  def deal([]), do: {:error, "Empty deck"}
+  def deal([card | deck]), do: {:ok, card, deck}
 end
