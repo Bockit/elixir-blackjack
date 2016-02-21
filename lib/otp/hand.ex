@@ -24,6 +24,10 @@ defmodule Blackjack.Otp.Hand do
   end
 
   # Server Callbacks
+  def init(hand \\ %Hand{}) do
+    {:ok, hand}
+  end
+
   def handle_call(:hand, _from, hand) do
     {:reply, hand, hand}
   end
