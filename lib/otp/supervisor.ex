@@ -1,4 +1,4 @@
-defmodule Blackjack.Otp.Floor do
+defmodule Blackjack.Otp.Supervisor do
   use Supervisor
 
   def init(_) do
